@@ -16,11 +16,21 @@ It is a portfolio project. The source is shared so you can see how it is built a
 
 ## Screens
 
+**Getting in**
+
 | | |
 |---|---|
-| ![Choose business or private access](docs/images/landing.png)<br>**Entry:** visitors choose business or private access | ![User login](docs/images/login.png)<br>**Login** with password recovery |
-| ![Business sign-up](docs/images/business-signup.png)<br>**Business sign-up** | ![Context-sensitive help](docs/images/tutorial.png)<br>**Context-sensitive tutorial** panels on every screen |
-| ![Settings](docs/images/settings.png)<br>**Settings:** language, graphics quality, music volume, fullscreen | |
+| ![Choose business or private access](docs/images/landing.png)<br>Visitors choose business or private access | ![User login](docs/images/login.png)<br>Login with password recovery |
+| ![Business sign-up](docs/images/business-signup.png)<br>Business sign-up | ![Context-sensitive help](docs/images/tutorial.png)<br>Context-sensitive tutorial cards |
+| ![Settings](docs/images/settings.png)<br>Language, graphics quality, music volume and fullscreen | |
+
+**Business tools**
+
+| | |
+|---|---|
+| ![Business dashboard](docs/images/business-dashboard.png)<br>Business dashboard: profile, fair entry, candidates, analytics and chat | ![Booth customisation](docs/images/business-booth.png)<br>Booth customisation: logo upload and the booths still available |
+| ![Business listings](docs/images/business-listings.png)<br>Create and manage job listings | ![Question and answer editor](docs/images/business-qa.png)<br>Publish questions and answers for visitors |
+| ![Booth analytics](docs/images/business-analytics.png)<br>Booth analytics: visitors, unique visitors and applicants | ![Business bio editor](docs/images/business-bio.png)<br>Business bio shown to visitors |
 
 ## What it does
 
