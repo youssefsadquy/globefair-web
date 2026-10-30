@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>{{{ PRODUCT_NAME }}}</title>
+
+    <!-- Self-contained styling - no TemplateData/ folder dependency, so this template works
+         with just this one file. -->
+    <style>
+      html, body { height: 100%; margin: 0; padding: 0; background: #1b1b1e; }
+      #unity-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+      #unity-canvas { background: #1b1b1e; width: 100%; height: 100%; }
+      #unity-loading-bar { position: absolute; display: none; text-align: center; color: #ddd; font-family: sans-serif; }
+      #unity-progress-bar-empty { width: 260px; height: 18px; margin: 12px auto; background: #333; border-radius: 9px; overflow: hidden; }
+      #unity-progress-bar-full { width: 0%; height: 100%; background: #4c8bf5; }
+      #unity-warning { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 10; }
+      #unity-fullscreen-button { position: absolute; right: 12px; bottom: 12px; width: 32px; height: 32px; background: rgba(255,255,255,0.15); cursor: pointer; border-radius: 4px; }
+    </style>
+
+    <!-- Firebase JS SDK (compat build - closest API shape to the native Unity SDK calls this
+         project already makes, which keeps Assets/Plugins/WebGL/AppFirebaseBridge.jslib simple).
+         Pin the version; bump all four lines together if you ever upgrade. -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-storage-compat.js"></script>
+    <!-- Your Firebase web config. Copy firebase-config.example.js to firebase-config.js (git-ignored)
+         and fill it in from Firebase console > Project settings > General > Your apps > Web app. -->
+    <script src="firebase-config.js"></script>
+    <script>
+      firebase.initializeApp(window.FIREBASE_CONFIG);
+    </script>
+</head>
+<body>
+    <div id="unity-container">
+      <canvas id="unity-canvas" tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div>Loading GlobeFair...</div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"></div>
+      <div id="unity-fullscreen-button"></div>
+    </div>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; color: white; padding: 10px; border-radius: 4px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px; border-radius: 4px;';
+          setTimeout(function () {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+      var config = {
+        dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+        frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+        codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+#if MEMORY_FILENAME
+        memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+#endif
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "{{{ COMPANY_NAME }}}",
+        productName: "{{{ PRODUCT_NAME }}}",
+        productVersion: "{{{ PRODUCT_VERSION }}}",
+        showBanner: unityShowBanner,
+      };
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = (100 * progress) + "%";
+        }).then((instance) => {
+          // AppFirebaseBridge.jslib needs this to SendMessage back into
+          // the AppFirebaseBridgeReceiver GameObject - see that file for details.
+          window.unityInstance = instance;
+
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            instance.SetFullscreen(1);
+          };
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+</body>
+</html>
