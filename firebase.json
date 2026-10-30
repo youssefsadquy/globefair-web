@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "globefair-46eb2",
+    "public": "WebGLBuild",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

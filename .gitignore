@@ -1,0 +1,44 @@
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+MemoryCaptures/
+*.csproj
+*.sln
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.apk
+*.aab
+*.unitypackage
+
+# WebGL build output (deployed to Firebase Hosting, not stored in git)
+WebGLBuild/
+WebGLBuild.zip
+.firebase/
+
+# Firebase and cloud configuration: never commit these
+google-services*.json
+google-services*.xml
+GoogleService-Info.plist
+Assets/WebGLTemplates/**/firebase-config.js
+.firebaserc
+serviceAccount*.json
+*.p12
+*.keystore
+.env
+.env.*
+
+# Editor and OS
+.vs/
+.idea/
+.DS_Store
+Thumbs.db
